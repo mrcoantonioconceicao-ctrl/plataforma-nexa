@@ -1,13 +1,11 @@
 use axum::{
-    Json, Router,
     extract::{Path, State},
     routing::{get, post},
+    Json, Router,
 };
 
 use serde::{Deserialize, Serialize};
-
 use std::net::SocketAddr;
-
 use uuid::Uuid;
 
 use ledger::{
@@ -17,14 +15,14 @@ use ledger::{
     },
     domain::{Account, Journal, JournalEntry, LedgerEntry},
     infrastructure::{
-        in_memory_journal_repository::InMemoryJournalRepository,
-        in_memory_ledger_repository::InMemoryLedgerRepository,
+        database::Database, in_memory_journal_repository::InMemoryJournalRepository,
+        postgres_ledger_repository::PostgresLedgerRepository,
     },
 };
 
 #[derive(Clone)]
 struct AppState {
-    ledger_service: LedgerService<InMemoryLedgerRepository>,
+    ledger_service: LedgerService<PostgresLedgerRepository>,
     journal_service: JournalService,
     chart_service: ChartOfAccountsService,
 }
@@ -108,6 +106,7 @@ async fn list_account_entries(
 ) -> Json<Vec<LedgerEntry>> {
     Json(state.ledger_service.find_by_account(&account))
 }
+
 async fn audit_ledger(State(state): State<AppState>) -> Json<AuditResponse> {
     let journals = state.journal_service.list();
 
@@ -121,15 +120,16 @@ async fn audit_ledger(State(state): State<AppState>) -> Json<AuditResponse> {
 
 #[tokio::main]
 async fn main() {
-    let ledger_repository = InMemoryLedgerRepository::new();
+    let database = Database::connect_from_env()
+        .await
+        .expect("Falha ao conectar ao PostgreSQL para o Ledger");
 
+    let ledger_repository = PostgresLedgerRepository::new(database.pool);
     let journal_repository = InMemoryJournalRepository::new();
 
     let state = AppState {
-        ledger_service: LedgerService::new(ledger_repository.clone()),
-
+        ledger_service: LedgerService::new(ledger_repository),
         journal_service: JournalService::new(journal_repository),
-
         chart_service: ChartOfAccountsService::new(),
     };
 
@@ -147,7 +147,7 @@ async fn main() {
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 4002));
 
-    println!("Nexavor Ledger running on {}", addr);
+    println!("Nexavor Ledger running with PostgreSQL on {}", addr);
 
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
 
