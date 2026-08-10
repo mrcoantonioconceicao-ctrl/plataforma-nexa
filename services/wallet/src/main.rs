@@ -1,10 +1,14 @@
+// ~/nexavor/services/wallet/src/main.rs
+
 use axum::{
-    Json, Router,
     extract::{Path, State},
     routing::{get, post},
+    Json, Router,
 };
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use std::{net::SocketAddr, sync::Arc};
+use uuid::Uuid;
 
 mod application;
 mod domain;
@@ -31,23 +35,22 @@ impl AppState {
 
 #[derive(Deserialize)]
 struct CreateWalletRequest {
-    user_id: String,
+    user_id: Uuid,
     currency: String,
 }
 
 #[derive(Deserialize)]
 struct AmountRequest {
-    user_id: String,
-    amount: i64,
+    wallet_id: Uuid,
+    amount: Decimal,
 }
 
 #[derive(Serialize)]
 struct WalletResponse {
-    id: String,
-    user_id: String,
+    id: Uuid,
+    user_id: Uuid,
     currency: String,
-    balance: i64,
-    status: String,
+    balance: Decimal,
 }
 
 async fn create_wallet(
@@ -61,53 +64,62 @@ async fn create_wallet(
         user_id: wallet.user_id,
         currency: wallet.currency,
         balance: wallet.balance,
-        status: format!("{:?}", wallet.status),
     })
 }
 
 async fn credit(
     State(state): State<AppState>,
     Json(req): Json<AmountRequest>,
-) -> Json<WalletResponse> {
-    let wallet = state.service.credit(&req.user_id, req.amount).unwrap();
+) -> Result<Json<WalletResponse>, String> {
+    let wallet = state
+        .service
+        .credit(req.wallet_id, req.amount)
+        .map_err(|e| e)?;
 
-    Json(WalletResponse {
+    Ok(Json(WalletResponse {
         id: wallet.id,
         user_id: wallet.user_id,
         currency: wallet.currency,
         balance: wallet.balance,
-        status: format!("{:?}", wallet.status),
-    })
+    }))
 }
 
 async fn debit(
     State(state): State<AppState>,
     Json(req): Json<AmountRequest>,
-) -> Json<WalletResponse> {
-    let wallet = state.service.debit(&req.user_id, req.amount).unwrap();
+) -> Result<Json<WalletResponse>, String> {
+    let wallet = state
+        .service
+        .debit(req.wallet_id, req.amount)
+        .map_err(|e| e)?;
 
-    Json(WalletResponse {
+    Ok(Json(WalletResponse {
         id: wallet.id,
         user_id: wallet.user_id,
         currency: wallet.currency,
         balance: wallet.balance,
-        status: format!("{:?}", wallet.status),
-    })
+    }))
 }
 
 async fn get_wallet(
     State(state): State<AppState>,
-    Path(user_id): Path<String>,
-) -> Json<Option<WalletResponse>> {
-    let wallet = state.service.get_wallet(&user_id);
+    Path(user_id_str): Path<String>,
+) -> Result<Json<Vec<WalletResponse>>, String> {
+    let user_id =
+        Uuid::parse_str(&user_id_str).map_err(|_| "UUID de usuário inválido".to_string())?;
+    let wallets = state.service.get_wallets_by_user(user_id);
 
-    Json(wallet.map(|w| WalletResponse {
-        id: w.id,
-        user_id: w.user_id,
-        currency: w.currency,
-        balance: w.balance,
-        status: format!("{:?}", w.status),
-    }))
+    let response = wallets
+        .into_iter()
+        .map(|w| WalletResponse {
+            id: w.id,
+            user_id: w.user_id,
+            currency: w.currency,
+            balance: w.balance,
+        })
+        .collect();
+
+    Ok(Json(response))
 }
 
 #[tokio::main]
@@ -115,17 +127,16 @@ async fn main() {
     let state = AppState::new();
 
     let app = Router::new()
-        .route("/wallet/create", post(create_wallet))
-        .route("/wallet/credit", post(credit))
-        .route("/wallet/debit", post(debit))
-        .route("/wallet/:user_id", get(get_wallet))
+        .route("/wallets", post(create_wallet))
+        .route("/wallets/credit", post(credit))
+        .route("/wallets/debit", post(debit))
+        .route("/wallets/user/:user_id", get(get_wallet))
         .with_state(state);
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 4001));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 4003));
 
-    println!("Wallet running on {}", addr);
+    println!("Nexavor Wallet Service running on {}", addr);
 
-    axum::serve(tokio::net::TcpListener::bind(addr).await.unwrap(), app)
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    axum::serve(listener, app).await.unwrap();
 }
