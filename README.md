@@ -1,13 +1,9 @@
 # Nexavor
-
-> Enterprise Financial Infrastructure Platform built in Rust
+Enterprise Financial Infrastructure Platform built in Rust
 
 Nexavor is a next-generation financial infrastructure platform focused on security, auditability, deterministic execution and enterprise-grade payment services.
 
----
-
-# Vision
-
+## Vision
 Nexavor is being built as a modular financial platform capable of supporting:
 
 - Digital Banking
@@ -20,193 +16,61 @@ Nexavor is being built as a modular financial platform capable of supporting:
 - Enterprise APIs
 - AI-assisted Financial Operations
 
----
-
-# Architecture
-
-- Rust
+## Architecture
+- Rust (Edition 2024)
 - Clean Architecture
-- DDD
-- SOA
+- Domain-Driven Design (DDD)
+- Service-Oriented Architecture (SOA)
 - Cloud Native
-- Modular Services
+- Modular Services / Cargo Workspaces
 - Deterministic Core
 - Security by Design
 - Auditability First
 
----
+## Current Status
 
-# Current Status
-
-## Sprint 0 — Foundation
-
-- Workspace
+### Sprint 0 & 1 — Foundation & Core Infrastructure
 - Cargo Workspace
-- Project Structure
-- CI
-- GitHub
+- Config, Shared Crates
+- Custom Error Handling
+- Logging & Observability (`tracing`)
+- **Status:** ✅ Completed
 
-Status:
+### Sprint 2 — Authentication Service
+- User Registration & Validation (Argon2id)
+- JWT Access & Refresh Token Rotation / Revocation
+- **APIs:** `POST /auth/register`, `POST /auth/login`, `POST /auth/refresh`
+- **Status:** ✅ Completed
 
-✅ Completed
+### Sprint 4 & 5 — Wallet & Ledger Services
+- Double-Entry Accounting Ledger (Immutable audit trail)
+- Wallet Service & Balances
+- **Status:** ✅ Completed
 
----
+### Sprint 6 — Payment Engine
+- Domain entities & core business logic for Pix & Stablecoins
+- Payment state management (Pending, Completed, Failed)
+- Unit & integration testing flows
+- **Status:** ✅ Completed
 
-## Sprint 1 — Core Infrastructure
+## Technologies
+- Rust, Tokio, Axum, Serde, UUID, JWT, Argon2id
+- SQLx, PostgreSQL, Rust Decimal
+- Tracing & Observability
 
-Implemented:
+## Next Sprints
 
-- Config
-- Shared
-- Error Handling
-- Logging
-- Observability
+### Sprint 3
+- Identity & Access Management (RBAC, Roles, Permissions, MFA)
 
-Status:
+### Sprint 7
+- Risk Engine (AML, Fraud Detection, Compliance rules)
 
-✅ Completed
+## Long Term Vision
+Nexavor aims to become an enterprise financial operating system capable of serving Banks, Fintechs, Payment Institutions, and Enterprise Platforms.
 
----
-
-## Sprint 2 — Authentication Service
-
-Implemented:
-
-### User
-
-- User Registration
-- Email Validation
-- Password Validation
-- Duplicate User Protection
-
-### Security
-
-- Argon2id Password Hashing
-- Password Verification
-- JWT Access Token
-- JWT Validation
-
-### Authentication
-
-- Login
-- Refresh Token
-- Refresh Token Store
-- Refresh Token Rotation
-- Refresh Token Revocation
-- Refresh Flow
-
-### API
-
-POST /auth/register
-
-POST /auth/login
-
-POST /auth/refresh
-
-Status:
-
-✅ Completed
-
----
-
-# Technologies
-
-- Rust
-- Tokio
-- Axum
-- Serde
-- UUID
-- JWT
-- Argon2id
-
-Future:
-
-- PostgreSQL
-- SQLx
-- Redis
-- Docker
-- Kubernetes
-- Prometheus
-- Grafana
-
----
-
-# Next Sprints
-
-## Sprint 3
-
-Identity & Access Management
-
-- Roles
-- Permissions
-- RBAC
-- MFA
-- Email Verification
-- Password Reset
-- Sessions
-
----
-
-## Sprint 4
-
-Wallet Service
-
-- Wallets
-- Balances
-- Internal Transfers
-- Ledger Integration
-
----
-
-## Sprint 5
-
-Ledger
-
-- Double Entry Accounting
-- Transactions
-- Audit Trail
-
----
-
-## Sprint 6
-
-Payment Engine
-
-- PIX
-- Stablecoins
-- Settlement
-- Webhooks
-
----
-
-## Sprint 7
-
-Risk Engine
-
-- Rules
-- AML
-- Fraud Detection
-- Compliance
-
----
-
-# Long Term Vision
-
-Nexavor aims to become an enterprise financial operating system capable of serving:
-
-- Banks
-- Fintechs
-- Payment Institutions
-- Healthcare
-- Government
-- Enterprise Platforms
-
----
-
-# Repository
-
+## Repository
 Private Repository
 
-Copyright © Nexavor
-
+Copyright © Nexavor  
 Under active development.
