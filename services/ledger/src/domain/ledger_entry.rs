@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -5,11 +6,18 @@ use uuid::Uuid;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LedgerEntry {
     pub id: Uuid,
+
     pub journal_id: Uuid,
+
     pub account_id: Uuid,
+
     pub currency: String,
+
     pub debit: Decimal,
+
     pub credit: Decimal,
+
+    pub created_at: DateTime<Utc>,
 }
 
 impl LedgerEntry {
@@ -22,11 +30,18 @@ impl LedgerEntry {
     ) -> Self {
         Self {
             id: Uuid::new_v4(),
+
             journal_id,
+
             account_id,
+
             currency,
+
             debit,
+
             credit,
+
+            created_at: Utc::now(),
         }
     }
 
@@ -39,7 +54,7 @@ impl LedgerEntry {
     }
 
     pub fn amount(&self) -> Decimal {
-        if self.debit > Decimal::ZERO {
+        if self.is_debit() {
             self.debit
         } else {
             self.credit

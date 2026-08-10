@@ -6,15 +6,43 @@ edition = "2024"
 [dependencies]
 shared = { path = "../../crates/shared" }
 
+# Web
 axum = { version = "0.7", features = ["macros"] }
-
 tokio = { version = "1", features = ["full"] }
 
+# Serialização
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
+# Identificadores
 uuid = { version = "1", features = ["v4", "serde"] }
 
+# Data/Hora
 chrono = { version = "0.4", features = ["serde"] }
 
+# Valores monetários
 rust_decimal = { version = "1", features = ["serde"] }
+
+# Banco de dados (preparação para produção)
+sqlx = { version = "0.8", default-features = false, features = [
+    "runtime-tokio-rustls",
+    "postgres",
+    "uuid",
+    "chrono",
+    "rust_decimal",
+    "macros"
+] }
+
+# Async Traits
+async-trait = "0.1"
+
+# Variáveis de ambiente
+dotenvy = "0.15"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+
+# Tratamento de erros
+anyhow = "1"
+thiserror = "2"
