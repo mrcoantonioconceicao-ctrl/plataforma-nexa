@@ -1308,17 +1308,17 @@ dependencies = [
 name = "payment"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "axum",
  "chrono",
- "ledger",
  "rust_decimal",
  "rust_decimal_macros",
  "serde",
  "serde_json",
- "sqlx",
  "tokio",
+ "tracing",
+ "tracing-subscriber",
  "uuid",
- "wallet",
 ]
 
 [[package]]
