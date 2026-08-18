@@ -1,142 +1,57 @@
 // ~/nexavor/services/wallet/src/main.rs
 
-use axum::{
-    extract::{Path, State},
-    routing::{get, post},
-    Json, Router,
-};
-use rust_decimal::Decimal;
-use serde::{Deserialize, Serialize};
-use std::{net::SocketAddr, sync::Arc};
-use uuid::Uuid;
-
-mod application;
 mod domain;
 mod infrastructure;
 
-use application::wallet_service::WalletService;
-use infrastructure::wallet_repository::InMemoryWalletRepository;
-
-#[derive(Clone)]
-struct AppState {
-    service: Arc<WalletService<InMemoryWalletRepository>>,
-}
-
-impl AppState {
-    fn new() -> Self {
-        let repo = InMemoryWalletRepository::new();
-        let service = WalletService::new(repo);
-
-        Self {
-            service: Arc::new(service),
-        }
-    }
-}
-
-#[derive(Deserialize)]
-struct CreateWalletRequest {
-    user_id: Uuid,
-    currency: String,
-}
-
-#[derive(Deserialize)]
-struct AmountRequest {
-    wallet_id: Uuid,
-    amount: Decimal,
-}
-
-#[derive(Serialize)]
-struct WalletResponse {
-    id: Uuid,
-    user_id: Uuid,
-    currency: String,
-    balance: Decimal,
-}
-
-async fn create_wallet(
-    State(state): State<AppState>,
-    Json(req): Json<CreateWalletRequest>,
-) -> Json<WalletResponse> {
-    let wallet = state.service.create_wallet(req.user_id, req.currency);
-
-    Json(WalletResponse {
-        id: wallet.id,
-        user_id: wallet.user_id,
-        currency: wallet.currency,
-        balance: wallet.balance,
-    })
-}
-
-async fn credit(
-    State(state): State<AppState>,
-    Json(req): Json<AmountRequest>,
-) -> Result<Json<WalletResponse>, String> {
-    let wallet = state
-        .service
-        .credit(req.wallet_id, req.amount)
-        .map_err(|e| e)?;
-
-    Ok(Json(WalletResponse {
-        id: wallet.id,
-        user_id: wallet.user_id,
-        currency: wallet.currency,
-        balance: wallet.balance,
-    }))
-}
-
-async fn debit(
-    State(state): State<AppState>,
-    Json(req): Json<AmountRequest>,
-) -> Result<Json<WalletResponse>, String> {
-    let wallet = state
-        .service
-        .debit(req.wallet_id, req.amount)
-        .map_err(|e| e)?;
-
-    Ok(Json(WalletResponse {
-        id: wallet.id,
-        user_id: wallet.user_id,
-        currency: wallet.currency,
-        balance: wallet.balance,
-    }))
-}
-
-async fn get_wallet(
-    State(state): State<AppState>,
-    Path(user_id_str): Path<String>,
-) -> Result<Json<Vec<WalletResponse>>, String> {
-    let user_id =
-        Uuid::parse_str(&user_id_str).map_err(|_| "UUID de usuário inválido".to_string())?;
-    let wallets = state.service.get_wallets_by_user(user_id);
-
-    let response = wallets
-        .into_iter()
-        .map(|w| WalletResponse {
-            id: w.id,
-            user_id: w.user_id,
-            currency: w.currency,
-            balance: w.balance,
-        })
-        .collect();
-
-    Ok(Json(response))
-}
+use domain::wallet::Wallet;
+use infrastructure::postgres_wallet_repository::PostgresWalletRepository;
+use rust_decimal_macros::dec;
+use sqlx::PgPool;
+use uuid::Uuid;
 
 #[tokio::main]
 async fn main() {
-    let state = AppState::new();
+    println!("Inicializando Nexavor Wallet Service com PostgreSQL...");
 
-    let app = Router::new()
-        .route("/wallets", post(create_wallet))
-        .route("/wallets/credit", post(credit))
-        .route("/wallets/debit", post(debit))
-        .route("/wallets/user/:user_id", get(get_wallet))
-        .with_state(state);
+    // URL padrão de conexão do workspace para testes locais / docker
+    let database_url = std::env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "postgres://postgres:postgres@localhost:5432/nexavor".to_string());
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 4003));
+    let pool = match PgPool::connect(&database_url).await {
+        Ok(p) => {
+            println!("Conexão com o PostgreSQL estabelecida com sucesso!");
+            p
+        }
+        Err(e) => {
+            println!(
+                "Aviso: Não foi possível conectar ao banco local ({}), rodando modo simulado/mock.",
+                e
+            );
+            return;
+        }
+    };
 
-    println!("Nexavor Wallet Service running on {}", addr);
+    let repo = PostgresWalletRepository::new(pool);
 
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    let user_id = Uuid::new_v4();
+    let mut wallet = Wallet::new(user_id, "BRL".to_string(), dec!(1000.00));
+
+    if let Err(e) = repo.save(&wallet).await {
+        println!("Erro ao salvar carteira: {}", e);
+        return;
+    }
+    println!("Carteira criada e salva no banco! ID: {}", wallet.id);
+
+    // Movimentação de saldo
+    if let Err(e) = wallet.credit(dec!(500.00)) {
+        println!("Erro ao creditar: {}", e);
+    } else {
+        println!("Credito aplicado. Novo saldo: {}", wallet.balance);
+    }
+
+    if let Err(e) = repo.save(&wallet).await {
+        println!("Erro ao atualizar carteira: {}", e);
+    } else {
+        println!("Estado atualizado persistido com sucesso no banco de dados.");
+    }
 }

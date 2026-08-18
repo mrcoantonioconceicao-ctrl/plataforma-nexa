@@ -9,21 +9,19 @@ use uuid::Uuid;
 pub struct Wallet {
     pub id: Uuid,
     pub user_id: Uuid,
-    pub currency: String,
     pub balance: Decimal,
+    pub currency: String,
     pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
 }
 
 impl Wallet {
-    pub fn new(user_id: Uuid, currency: String) -> Self {
+    pub fn new(user_id: Uuid, currency: String, initial_balance: Decimal) -> Self {
         Self {
             id: Uuid::new_v4(),
             user_id,
+            balance: initial_balance,
             currency,
-            balance: Decimal::ZERO,
             created_at: Utc::now(),
-            updated_at: Utc::now(),
         }
     }
 
@@ -32,7 +30,6 @@ impl Wallet {
             return Err("O valor do crédito deve ser maior que zero.".to_string());
         }
         self.balance += amount;
-        self.updated_at = Utc::now();
         Ok(())
     }
 
@@ -44,7 +41,6 @@ impl Wallet {
             return Err("Saldo insuficiente na carteira.".to_string());
         }
         self.balance -= amount;
-        self.updated_at = Utc::now();
         Ok(())
     }
 }

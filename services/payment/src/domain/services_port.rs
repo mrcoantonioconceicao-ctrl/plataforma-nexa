@@ -15,8 +15,8 @@ pub trait LedgerPort: Send + Sync {
     async fn record_transaction(
         &self,
         transaction_id: Uuid,
-        source_account: Uuid,
-        destination_account: Uuid,
+        source_account_id: Uuid,
+        destination_account_id: Uuid,
         amount: Decimal,
         currency: String,
     ) -> Result<(), String>;

@@ -1,1 +1,1 @@
-pub mod wallet_repository;
+pub mod postgres_wallet_repository;
