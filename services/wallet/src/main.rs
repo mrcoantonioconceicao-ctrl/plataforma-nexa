@@ -1,19 +1,21 @@
 // ~/nexavor/services/wallet/src/main.rs
 
+mod api;
 mod domain;
 mod infrastructure;
 
-use domain::wallet::Wallet;
+use api::wallet_handler::{AppState, create_wallet, debit_wallet, get_wallet};
+use axum::{
+    Router,
+    routing::{get, post},
+};
 use infrastructure::postgres_wallet_repository::PostgresWalletRepository;
-use rust_decimal_macros::dec;
 use sqlx::PgPool;
-use uuid::Uuid;
 
 #[tokio::main]
 async fn main() {
-    println!("Inicializando Nexavor Wallet Service com PostgreSQL...");
+    println!("Inicializando Nexavor Wallet Service API com PostgreSQL...");
 
-    // URL padrão de conexão do workspace para testes locais / docker
     let database_url = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "postgres://postgres:postgres@localhost:5432/nexavor".to_string());
 
@@ -23,35 +25,28 @@ async fn main() {
             p
         }
         Err(e) => {
-            println!(
-                "Aviso: Não foi possível conectar ao banco local ({}), rodando modo simulado/mock.",
+            eprintln!(
+                "Aviso: Falha na conexão com o banco ({}), subindo sem pool ativo.",
                 e
             );
-            return;
+            // Em ambiente real de produção exigiriamos o banco, mas para fins de boot seguro mantemos o fallback ou saímos.
+            std::process::exit(1);
         }
     };
 
     let repo = PostgresWalletRepository::new(pool);
+    let state = AppState { repo };
 
-    let user_id = Uuid::new_v4();
-    let mut wallet = Wallet::new(user_id, "BRL".to_string(), dec!(1000.00));
+    let app = Router::new()
+        .route("/wallets", post(create_wallet))
+        .route("/wallets/:id", get(get_wallet))
+        .route("/wallets/:id/debit", post(debit_wallet))
+        .with_state(state);
 
-    if let Err(e) = repo.save(&wallet).await {
-        println!("Erro ao salvar carteira: {}", e);
-        return;
-    }
-    println!("Carteira criada e salva no banco! ID: {}", wallet.id);
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:8081")
+        .await
+        .unwrap();
+    println!("Wallet Service API rodando em http://127.0.0.1:8081");
 
-    // Movimentação de saldo
-    if let Err(e) = wallet.credit(dec!(500.00)) {
-        println!("Erro ao creditar: {}", e);
-    } else {
-        println!("Credito aplicado. Novo saldo: {}", wallet.balance);
-    }
-
-    if let Err(e) = repo.save(&wallet).await {
-        println!("Erro ao atualizar carteira: {}", e);
-    } else {
-        println!("Estado atualizado persistido com sucesso no banco de dados.");
-    }
+    axum::serve(listener, app).await.unwrap();
 }
