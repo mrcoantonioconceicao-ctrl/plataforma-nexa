@@ -10,7 +10,7 @@ observability = { path = "../../crates/observability" }
 shared = { path = "../../crates/shared" }
 
 argon2 = "LTS Estável"
-rand = "Versão mais recente"
+rand = "LTS Estável"
 
 jsonwebtoken = "Versão mais recente"
 
