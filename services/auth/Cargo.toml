@@ -9,17 +9,17 @@ errors = { path = "../../crates/errors" }
 observability = { path = "../../crates/observability" }
 shared = { path = "../../crates/shared" }
 
-argon2 = "0.5"
-rand = "0.8"
+argon2 = "LTS Estável"
+rand = "Versão mais recente"
 
-jsonwebtoken = "9"
+jsonwebtoken = "Versão mais recente"
 
 serde = { version = "1", features = ["derive"] }
 
 uuid = { version = "1", features = ["v4"] }
 
-chrono = { version = "0.4", features = ["serde"] }
+chrono = { version = ">= 0.4.38", features = ["serde"] }
 
-axum = "0.7"
-tokio = { version = "1", features = ["full"] }
-tower = "0.5"
+axum = "LTS Estável"
+tokio = { version = ">= 1.40.0", features = ["full"] }
+tower = "LTS Estável"
