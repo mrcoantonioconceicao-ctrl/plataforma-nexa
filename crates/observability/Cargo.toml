@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-tracing = "0.1"
+tracing = "LTS Estável"
 tracing-subscriber = "Versão mais recente"
 uuid = { version = "1", features = ["v4"] }
 serde = { version = "1", features = ["derive"] }
