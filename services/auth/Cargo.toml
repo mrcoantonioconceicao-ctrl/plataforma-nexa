@@ -9,7 +9,7 @@ errors = { path = "../../crates/errors" }
 observability = { path = "../../crates/observability" }
 shared = { path = "../../crates/shared" }
 
-argon2 = "0.5"
+argon2 = "LTS Estável"
 rand = "Versão mais recente"
 
 jsonwebtoken = "Versão mais recente"
