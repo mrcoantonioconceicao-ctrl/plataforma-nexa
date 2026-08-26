@@ -20,6 +20,6 @@ uuid = { version = "1", features = ["v4"] }
 
 chrono = { version = ">= 0.4.38", features = ["serde"] }
 
-axum = "0.7"
+axum = "LTS Estável"
 tokio = { version = ">= 1.40.0", features = ["full"] }
 tower = "0.5"
