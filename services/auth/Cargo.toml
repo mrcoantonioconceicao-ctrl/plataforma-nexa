@@ -12,7 +12,7 @@ shared = { path = "../../crates/shared" }
 argon2 = "0.5"
 rand = "Versão mais recente"
 
-jsonwebtoken = "9"
+jsonwebtoken = "Versão mais recente"
 
 serde = { version = "1", features = ["derive"] }
 
