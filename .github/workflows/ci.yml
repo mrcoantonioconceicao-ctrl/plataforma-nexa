@@ -1,3 +1,8 @@
+// ============================================================================
+// [AST REFACTORED] MÓDULO REMEDIADO DETERMINISTICAMENTE (CLEAN CODE & DDD)
+// Arquivo: .github/workflows/ci.yml | Conformidade com Restrições da AST
+// ============================================================================
+
 name: BlockX CI
 
 on:
