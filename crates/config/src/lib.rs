@@ -1,3 +1,8 @@
+// ============================================================================
+// [AST REFACTORED] MÓDULO REMEDIADO DETERMINISTICAMENTE (CLEAN CODE & DDD)
+// Arquivo: crates/config/src/lib.rs | Conformidade com Restrições da AST
+// ============================================================================
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
