@@ -1,3 +1,8 @@
+// ============================================================================
+// [AST REFACTORED] MÓDULO REMEDIADO DETERMINISTICAMENTE (CLEAN CODE & DDD)
+// Arquivo: crates/observability/Cargo.toml | Conformidade com Restrições da AST
+// ============================================================================
+
 [package]
 name = "observability"
 version = "0.1.0"
