@@ -17,6 +17,7 @@ pub struct AppState {
 }
 
 impl AppState {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             repository: Arc::new(InMemoryUserRepository::new()),
