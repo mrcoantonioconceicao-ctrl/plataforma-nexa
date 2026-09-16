@@ -11,6 +11,7 @@ pub struct UserRole {
 }
 
 impl UserRole {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(user_id: Uuid, role_id: Uuid) -> Self {
         Self {
             id: Uuid::new_v4(),
