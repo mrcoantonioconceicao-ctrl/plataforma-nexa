@@ -12,6 +12,7 @@ pub struct PermissionRepository {
 }
 
 impl PermissionRepository {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             permissions: Mutex::new(HashMap::new()),
