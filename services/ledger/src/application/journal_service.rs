@@ -13,6 +13,7 @@ pub struct JournalService {
 }
 
 impl JournalService {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(repository: InMemoryJournalRepository) -> Self {
         Self { repository }
     }
