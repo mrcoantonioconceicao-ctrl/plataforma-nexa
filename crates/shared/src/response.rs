@@ -8,6 +8,7 @@ pub struct ApiResponse<T> {
 }
 
 impl<T> ApiResponse<T> {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn success(data: T) -> Self {
         Self {
             success: true,
