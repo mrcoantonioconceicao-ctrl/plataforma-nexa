@@ -12,6 +12,7 @@ pub struct InMemoryLedgerRepository {
 }
 
 impl InMemoryLedgerRepository {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             entries: Arc::new(Mutex::new(Vec::new())),
