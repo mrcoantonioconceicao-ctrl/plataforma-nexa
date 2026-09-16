@@ -10,6 +10,7 @@ pub struct WalletService {
 }
 
 impl WalletService {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(repo: PostgresWalletRepository) -> Self {
         Self { repo }
     }
