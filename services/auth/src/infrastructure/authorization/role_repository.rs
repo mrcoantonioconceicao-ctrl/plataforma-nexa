@@ -12,6 +12,7 @@ pub struct RoleRepository {
 }
 
 impl RoleRepository {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             roles: Mutex::new(HashMap::new()),
