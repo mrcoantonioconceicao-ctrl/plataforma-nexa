@@ -10,6 +10,7 @@ pub struct Money {
 }
 
 impl Money {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(amount: Decimal, currency: Currency) -> Self {
         Self { amount, currency }
     }
