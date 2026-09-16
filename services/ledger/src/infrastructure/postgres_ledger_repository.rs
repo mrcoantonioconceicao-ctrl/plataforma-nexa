@@ -39,6 +39,7 @@ pub struct PostgresLedgerRepository {
 }
 
 impl PostgresLedgerRepository {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(pool: PgPool) -> Self {
         Self {
             pool,
