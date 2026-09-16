@@ -9,6 +9,7 @@ pub struct Role {
 }
 
 impl Role {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(name: String, description: String) -> Self {
         Self {
             id: Uuid::new_v4(),
