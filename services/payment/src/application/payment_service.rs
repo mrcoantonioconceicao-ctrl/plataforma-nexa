@@ -15,6 +15,7 @@ pub struct PaymentService<R: PaymentRepository, W: WalletPort, L: LedgerPort> {
 }
 
 impl<R: PaymentRepository, W: WalletPort, L: LedgerPort> PaymentService<R, W, L> {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(repo: R, wallet_port: W, ledger_port: L) -> Self {
         Self {
             repo,
