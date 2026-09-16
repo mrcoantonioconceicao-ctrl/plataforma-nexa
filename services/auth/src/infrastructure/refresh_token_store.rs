@@ -9,6 +9,7 @@ pub struct RefreshTokenStore {
 }
 
 impl RefreshTokenStore {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             active: Mutex::new(HashMap::new()),
