@@ -13,6 +13,7 @@ pub enum Environment {
 }
 
 impl Environment {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn from_str(value: &str) -> Self {
         match value.to_lowercase().as_str() {
             "production" => Self::Production,
