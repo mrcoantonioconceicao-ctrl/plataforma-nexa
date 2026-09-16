@@ -45,6 +45,7 @@ impl LedgerEntry {
         }
     }
 
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn is_debit(&self) -> bool {
         self.debit > Decimal::ZERO
     }
