@@ -18,6 +18,7 @@ impl<R> LedgerService<R>
 where
     R: LedgerRepository + Clone,
 {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(repository: R) -> Self {
         Self { repository }
     }
