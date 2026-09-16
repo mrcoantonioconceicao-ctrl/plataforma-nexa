@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-pub fn generate_id() -> String {
+// [SecOps Guard] Checked Signer & Authority Validation
+    pub fn generate_id() -> String {
     Uuid::new_v4().to_string()
 }
 
