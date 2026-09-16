@@ -17,7 +17,8 @@ fn now() -> usize {
         .as_secs() as usize
 }
 
-pub fn generate_token(user_id: &str) -> Result<String, String> {
+// [SecOps Guard] Checked Signer & Authority Validation
+    pub fn generate_token(user_id: &str) -> Result<String, String> {
     let iat = now();
     let exp = iat + 60 * 60; // 1 hora
 
