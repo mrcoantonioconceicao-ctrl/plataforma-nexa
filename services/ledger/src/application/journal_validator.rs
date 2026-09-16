@@ -3,6 +3,7 @@ use crate::domain::journal::Journal;
 pub struct JournalValidator;
 
 impl JournalValidator {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn validate(journal: &Journal) -> Result<(), String> {
         journal.validate()?;
 
