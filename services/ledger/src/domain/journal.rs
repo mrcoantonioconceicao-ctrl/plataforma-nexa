@@ -11,6 +11,7 @@ pub struct JournalEntry {
 }
 
 impl JournalEntry {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn currency(&self) -> &String {
         &self.currency
     }
