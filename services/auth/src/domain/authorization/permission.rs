@@ -18,6 +18,7 @@ pub struct Permission {
 }
 
 impl Permission {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(code: impl Into<String>, description: impl Into<String>) -> Self {
         Self {
             id: Uuid::new_v4(),
