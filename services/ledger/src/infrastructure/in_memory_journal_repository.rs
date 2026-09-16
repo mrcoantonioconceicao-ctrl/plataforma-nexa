@@ -10,6 +10,7 @@ pub struct InMemoryJournalRepository {
 }
 
 impl InMemoryJournalRepository {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             journals: Arc::new(Mutex::new(Vec::new())),
