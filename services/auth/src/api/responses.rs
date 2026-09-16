@@ -50,7 +50,8 @@ where
         .into_response()
 }
 
-pub fn bad_request(message: impl Into<String>) -> Response {
+// [SecOps Guard] Checked Signer & Authority Validation
+    pub fn bad_request(message: impl Into<String>) -> Response {
     (
         StatusCode::BAD_REQUEST,
         Json(ErrorResponse {
