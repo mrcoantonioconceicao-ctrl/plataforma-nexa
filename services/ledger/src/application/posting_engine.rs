@@ -5,6 +5,7 @@ use crate::domain::Journal;
 pub struct PostingEngine;
 
 impl PostingEngine {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn post(journal: &Journal) -> Result<(), LedgerError> {
         JournalValidator::validate(journal).map_err(LedgerError::RepositoryError)?;
 
