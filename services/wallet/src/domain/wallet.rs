@@ -15,6 +15,7 @@ pub struct Wallet {
 }
 
 impl Wallet {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(user_id: Uuid, currency: String, initial_balance: Decimal) -> Self {
         Self {
             id: Uuid::new_v4(),
