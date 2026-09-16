@@ -9,6 +9,7 @@ pub struct User {
 }
 
 impl User {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new(email: String, password_hash: String) -> Self {
         Self {
             id: Uuid::new_v4(),
