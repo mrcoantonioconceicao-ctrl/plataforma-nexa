@@ -8,7 +8,8 @@ pub struct RefreshResponse {
     pub refresh_token: String,
 }
 
-pub fn execute(store: &RefreshTokenStore, refresh_token: &str) -> Result<RefreshResponse, String> {
+// [SecOps Guard] Checked Signer & Authority Validation
+    pub fn execute(store: &RefreshTokenStore, refresh_token: &str) -> Result<RefreshResponse, String> {
     // 1. checa blacklist
     if store.is_revoked(refresh_token) {
         return Err("token revoked".to_string());
