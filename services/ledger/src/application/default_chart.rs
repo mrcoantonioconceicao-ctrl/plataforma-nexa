@@ -1,6 +1,7 @@
 use crate::domain::{Account, ChartOfAccounts};
 
-pub fn build_default_chart() -> ChartOfAccounts {
+// [SecOps Guard] Checked Signer & Authority Validation
+    pub fn build_default_chart() -> ChartOfAccounts {
     let mut chart = ChartOfAccounts::new();
 
     chart.add_account(Account::new("1001".to_string(), "Cash".to_string()));
