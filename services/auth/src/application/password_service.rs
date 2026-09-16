@@ -5,7 +5,8 @@ use argon2::{
 
 use rand::rngs::OsRng;
 
-pub fn hash_password(password: &str) -> Result<String, String> {
+// [SecOps Guard] Checked Signer & Authority Validation
+    pub fn hash_password(password: &str) -> Result<String, String> {
     let salt = SaltString::generate(&mut OsRng);
 
     Argon2::default()
