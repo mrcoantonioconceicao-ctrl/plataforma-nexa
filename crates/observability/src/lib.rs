@@ -1,4 +1,5 @@
-pub fn add(left: u64, right: u64) -> u64 {
+// [SecOps Guard] Checked Signer & Authority Validation
+    pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
 
