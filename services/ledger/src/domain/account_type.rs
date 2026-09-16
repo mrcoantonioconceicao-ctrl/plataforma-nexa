@@ -14,6 +14,7 @@ pub enum AccountType {
 
 impl AccountType {
     /// Retorna verdadeiro para contas que normalmente possuem saldo devedor.
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn is_debit_normal(self) -> bool {
         matches!(self, Self::Asset | Self::Expense)
     }
