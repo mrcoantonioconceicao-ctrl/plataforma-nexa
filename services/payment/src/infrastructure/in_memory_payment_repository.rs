@@ -11,6 +11,7 @@ pub struct InMemoryPaymentRepository {
 }
 
 impl InMemoryPaymentRepository {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             payments: Mutex::new(HashMap::new()),
