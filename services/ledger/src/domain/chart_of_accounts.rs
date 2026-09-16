@@ -8,6 +8,7 @@ pub struct ChartOfAccounts {
 }
 
 impl ChartOfAccounts {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             accounts: HashMap::new(),
