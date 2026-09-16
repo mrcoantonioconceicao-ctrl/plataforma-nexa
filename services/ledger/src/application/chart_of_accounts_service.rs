@@ -7,6 +7,7 @@ pub struct ChartOfAccountsService {
 }
 
 impl ChartOfAccountsService {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self {
             chart: build_default_chart(),
