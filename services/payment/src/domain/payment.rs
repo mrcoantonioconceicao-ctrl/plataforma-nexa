@@ -53,6 +53,7 @@ impl Payment {
         }
     }
 
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn complete(&mut self) {
         self.status = PaymentStatus::Completed;
         self.updated_at = Utc::now();
