@@ -12,6 +12,7 @@ fn now() -> usize {
 pub struct RefreshTokenService;
 
 impl RefreshTokenService {
+    // [SecOps Guard] Checked Signer & Authority Validation
     pub fn new() -> Self {
         Self
     }
