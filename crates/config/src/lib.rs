@@ -54,7 +54,7 @@ impl AppConfig {
             .unwrap_or(8080);
 
         let jwt_secret =
-            std::env::var("JWT_SECRET").unwrap_or_else(|_| "blockx-development-secret".to_string());
+            std::env::var("JWT_SECRET").expect("JWT_SECRET must be set in the environment for security reasons. A hardcoded default (especially a weak one) must never be used in production.");
 
         let jwt_expiration_seconds = std::env::var("JWT_EXPIRATION_SECONDS")
             .unwrap_or_else(|_| "900".to_string())
