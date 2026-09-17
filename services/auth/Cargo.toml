@@ -4,22 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-config = { path = "../../crates/config" }
-errors = { path = "../../crates/errors" }
-observability = { path = "../../crates/observability" }
-shared = { path = "../../crates/shared" }
-
-argon2 = "LTS Estável"
-rand = "LTS Estável"
-
-jsonwebtoken = "Versão mais recente"
-
+argon2 = "0.5"
+tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
-
-uuid = { version = "1", features = ["v4"] }
-
-chrono = { version = "LTS Estável", features = ["serde"] }
-
-axum = "LTS Estável"
-tokio = { version = "Versão mais recente", features = ["full"] }
-tower = "LTS Estável"
