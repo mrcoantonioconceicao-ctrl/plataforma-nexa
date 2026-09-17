@@ -1,16 +1,11 @@
-// ============================================================================
-// [AST REFACTORED] MÓDULO REMEDIADO DETERMINISTICAMENTE (CLEAN CODE & DDD)
-// Arquivo: crates/observability/Cargo.toml | Conformidade com Restrições da AST
-// ============================================================================
-
 [package]
 name = "observability"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-tracing = "LTS Estável"
-tracing-subscriber = "Versão mais recente"
+tracing = "0.1"
+tracing-subscriber = "0.3"
 uuid = { version = "1", features = ["v4"] }
 serde = { version = "1", features = ["derive"] }
-chrono = { version = "LTS Estável", features = ["serde"] }
+chrono = { version = "0.4", features = ["serde"] }
