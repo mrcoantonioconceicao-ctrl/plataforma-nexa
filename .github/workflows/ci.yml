@@ -1,15 +1,9 @@
-// ============================================================================
-// [AST REFACTORED] MÓDULO REMEDIADO DETERMINISTICAMENTE (CLEAN CODE & DDD)
-// Arquivo: .github/workflows/ci.yml | Conformidade com Restrições da AST
-// ============================================================================
-
 name: BlockX CI
 
 on:
   push:
     branches:
       - main
-
   pull_request:
     branches:
       - main
@@ -17,16 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cargo Check
-        run: cargo check
-
-      - name: Cargo Test
-        run: cargo test
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo check && cargo test
