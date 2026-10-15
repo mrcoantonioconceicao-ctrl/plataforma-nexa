@@ -10,3 +10,6 @@
 
 ---
 *Auditoria executada de forma autónoma com foco rigoroso em conformidade normativa e mitigação de riscos.*
+
+## 🔍 Metodologia de Auditoria e Escopo
+*Declaração de resultado limpo aplicável estritamente aos critérios de segurança descritos na metodologia documentada do Graph RAG e análise estática deste repositório.*
