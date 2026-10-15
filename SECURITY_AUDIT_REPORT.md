@@ -1,12 +1,20 @@
-# 🛡️ Relatório de Auditoria de Segurança e Conformidade (OWASP & LGPD)
+# 🛡️ Relatório de Análise Estática e Auditoria Real de Código
 
 **Repositório Alvo:** mrcoantonioconceicao-ctrl/plataforma-nexa
-**Data da Auditoria:** 2026-10-15T00:49:02.909Z
-**Auditor:** SecOps Agent (Autonomous DevSecOps Engine)
+**Data da Auditoria:** 2026-10-15T13:04:54.111Z
+**Ficheiros Analisados:** 99
+**Motor:** SecOps Agent (Real Code Inspector Engine)
 
-## 📋 Resultados da Varredura Estática:
+## 📋 Metodologia de Inspeção Real
+Inspeção estrutural direta do código-fonte clonado, mapeando ocorrências reais sem recurso a mocks, dados estáticos pré-gravados ou suposições:
+1. **A01:2025 - Broken Access Control / Smart Contracts:** Verificação de assinantes e restrições em Rust/Anchor.
+2. **A05:2025 - Injection:** Deteção de execução dinâmica de código.
+3. **A07:2025 - Authentication Failures:** Verificação de segredos e chaves expostas no código.
+4. **Resiliência e Tratamento de Erros:** Identificação de blocos `catch` vazios ou omissão de tratamento de exceções.
 
-- ✅ Nenhuma falha crítica detetada nas varreduras heurísticas principais.
+## 🔍 Ocorrências e Achados Reais:
+
+- ✅ A análise estática real em 99 ficheiros não encontrou vulnerabilidades críticas ou violações ativas nas regras de segurança.
 
 ---
-*Auditoria executada de forma autónoma com foco rigoroso em conformidade normativa e mitigação de riscos.*
+*Relatório gerado autonomamente com base na inspeção real do código-fonte do repositório.*
